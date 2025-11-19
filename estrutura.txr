@@ -1,0 +1,112 @@
+Projeto: Pipeline ETL Serverless — Google Cloud (BigQuery + Cloud Functions)
+
+Descrição:
+Pipeline ETL orientado a objetos, modular e serverless, usando:
+- Python 3.11
+- Cloud Functions
+- BigQuery
+- Secret Manager
+- Pandas
+- Requests
+- Padrões POO + SOLID
+- Logging estruturado
+- Testes unitários com pytest
+- Deploy automatizado via gcloud CLI
+
+-------------------------------------------------------
+ESTRUTURA DO PROJETO
+-------------------------------------------------------
+
+.
+├── README.md                        # Documentação do projeto
+├── estrutura.txt                    # Estrutura completa do projeto
+├── requirements.txt                 # Dependências do Python
+├── .gitignore                       # Arquivos ignorados pelo Git
+
+├── src/
+│   ├── main.py                      # Execução local do pipeline
+│   ├── cloud_function_handler.py    # Entrypoint da Cloud Function
+
+│   ├── core/
+│   │   ├── config.py                # Configurações, variáveis de ambiente, pydantic (se aplicável)
+│   │   ├── logger.py                # Logging customizado (JSON logs para cloud)
+│   │   └── exceptions.py            # Exceções e erros customizados do ETL
+
+│   ├── etl/
+│   │   ├── extractor.py             # Classe Extractor (responsável por consumir APIs externas)
+│   │   ├── transformer.py           # Classe Transformer (limpeza e transformação com Pandas)
+│   │   └── loader.py                # Classe Loader (carrega informações no BigQuery)
+
+│   ├── services/
+│   │   ├── api_service.py           # Serviço base de APIs, requests, retries, headers, timeouts
+│   │   ├── bigquery_service.py      # Serviço: ingestão, criação de tabela, schema, loads
+│   │   └── secrets_service.py       # Serviço: acesso ao Secret Manager do GCP
+
+│   ├── utils/
+│   │   ├── validators.py            # Validações auxiliares dos dados
+│   │   └── serializers.py           # Conversões de tipos
+
+│   └── models/
+│       ├── record_model.py          # Modelo de dados (DTO/pydantic)
+│       └── schema_definition.py     # Schema do BigQuery organizado
+
+├── tests/
+│   ├── __init__.py
+│   ├── test_extractor.py            # Testes de extração usando mocks
+│   ├── test_transformer.py          # Testes de transformação (Pandas)
+│   ├── test_loader.py               # Testes de envio ao BigQuery (mockado)
+│   ├── test_bigquery_service.py     # Testes do serviço BigQuery
+│   ├── test_api_service.py          # Testes do serviço de API
+│   └── test_cloud_handler.py        # Teste do endpoint Cloud Function
+
+├── deploy/
+│   ├── deploy.sh                    # Script automatizado de deploy para Cloud Functions
+│   ├── gcloud_instructions.md       # Explicações de deploy manual
+│   └── architecture_diagram.png     # Diagrama da arquitetura
+
+├── docs/
+│   ├── architecture.md              # Documentação da arquitetura do ETL
+│   ├── bigquery_schema.md           # Documentação do schema final
+│   ├── api_reference.md             # Descrição da API consumida
+│   └── looker_setup.md              # Como conectar BigQuery ao Looker Studio
+
+-------------------------------------------------------
+DETALHES DAS PRINCIPAIS PASTAS
+-------------------------------------------------------
+
+src/core/
+- Contém a base do projeto (config, logs e exceções).
+- Arquitetura limpa separando as regras de negócio.
+
+src/etl/
+- Cada etapa do pipeline tem sua classe orientada a objetos:
+    Extractor → coleta dados
+    Transformer → limpa e modela os dados
+    Loader → envia ao BigQuery
+
+src/services/
+- Acesso a APIs, BigQuery e Secret Manager.
+- Evita acoplamento direto dentro das classes ETL.
+
+src/models/
+- Define modelos de dados, schemas e validações.
+- Facilita transformação, padronização e consistência.
+
+tests/
+- Testes completos, com mocks e separação por camada.
+
+deploy/
+- Scripts de deploy + documentação de infraestrutura.
+
+docs/
+- Documentação técnica e diagramas.
+
+-------------------------------------------------------
+CONCLUSÃO
+-------------------------------------------------------
+O projeto segue boas práticas de engenharia de software:
+- Arquitetura modular e limpa
+- POO aplicada em todas as etapas
+- Testes unitários
+- Logging estruturado
+- Deploy pronto para produção

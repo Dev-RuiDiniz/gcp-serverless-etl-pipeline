@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+.venv/
+
+# VSCode
+.vscode/
+
+# Mac / Linux / Windows
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Distribuições
+dist/
+build/
+
+# Cloud Functions
+.idea/
+.gcloud/
