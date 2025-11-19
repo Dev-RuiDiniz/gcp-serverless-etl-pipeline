@@ -77,11 +77,12 @@ Copiar código
     ├── deploy.sh
     └── gcloud_instructions.md
 ```
+---
 
 ## 🚀 Execução Local
 
 ```bash
-Copiar código
+
 python -m venv venv
 source venv/bin/activate       # Linux/Mac
 venv\Scripts\activate          # Windows
@@ -97,7 +98,7 @@ python src/main.py
 Deploy manual:
 
 ```bash
-Copiar código
+
 gcloud functions deploy etl_pipeline \
   --runtime python311 \
   --trigger-http \
