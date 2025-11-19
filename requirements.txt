@@ -1,8 +1,24 @@
+# --- Core ---
 pandas
+pyarrow
+
+# --- HTTP requests ---
 requests
+
+# --- Google Cloud ---
 google-cloud-bigquery
 google-cloud-secret-manager
 google-cloud-core
-pyarrow
-python-dotenv
+
+# --- Logging estruturado ---
 python-json-logger
+
+# --- Variáveis de ambiente ---
+python-dotenv
+
+# --- Tipagem ---
+typing-extensions
+
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
