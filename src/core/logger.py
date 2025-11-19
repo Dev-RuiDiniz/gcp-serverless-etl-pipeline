@@ -4,10 +4,8 @@ from pythonjsonlogger import jsonlogger
 
 def configure_logger():
     """
-    Configura logging estruturado em JSON,
-    ideal para Cloud Functions e observabilidade.
+    Configure structured JSON logging.
     """
-
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
 

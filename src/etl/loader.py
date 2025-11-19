@@ -1,40 +1,39 @@
+from typing import Optional, List
+import pandas as pd
 from google.cloud import bigquery
+
+from src.services.bigquery_service import BigQueryService
 from src.core.logger import logger
 from src.core.exceptions import LoadError
 
 
 class Loader:
     """
-    Classe responsável por carregar dados no BigQuery.
+    Loader delegates to BigQueryService for dataset/table creation and dataframe loads.
     """
 
-    def __init__(self, project_id: str, dataset: str, table: str):
-        self.project_id = project_id
-        self.dataset = dataset
-        self.table = table
-        self.client = bigquery.Client(project=project_id)
+    def __init__(self, project_id: str, location: str = "US"):
+        self.bq = BigQueryService(project_id=project_id, location=location)
 
-    @property
-    def table_id(self) -> str:
-        return f"{self.project_id}.{self.dataset}.{self.table}"
-
-    def load_dataframe(self, df):
-        logger.info({
-            "event": "load_start",
-            "table": self.table_id,
-            "records": len(df)
-        })
-
+    def load(self,
+             df: pd.DataFrame,
+             dataset_id: str,
+             table_id: str,
+             write_disposition: str = "WRITE_APPEND",
+             create_dataset: bool = True,
+             create_table: bool = False,
+             table_schema: Optional[List[bigquery.SchemaField]] = None):
         try:
-            job = self.client.load_table_from_dataframe(df, self.table_id)
-            job.result()
-
-            logger.info({
-                "event": "load_success",
-                "table": self.table_id,
-                "records_loaded": len(df)
-            })
-
+            result = self.bq.load_dataframe(
+                df=df,
+                dataset_id=dataset_id,
+                table_id=table_id,
+                write_disposition=write_disposition,
+                create_dataset=create_dataset,
+                create_table=create_table,
+                table_schema=table_schema,
+            )
+            return result
         except Exception as e:
-            logger.error({"event": "load_error", "error": str(e)})
-            raise LoadError(f"Erro ao carregar dados no BigQuery: {e}")
+            logger.error({"event": "loader_error", "error": str(e)})
+            raise LoadError(f"Erro no loader: {e}")

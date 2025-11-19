@@ -1,6 +1,6 @@
 import time
 import requests
-from typing import Optional
+from typing import Optional, Any, Dict
 
 from src.core.logger import logger
 from src.core.exceptions import ExtractError
@@ -8,11 +8,7 @@ from src.core.exceptions import ExtractError
 
 class APIService:
     """
-    Serviço responsável por realizar requisições HTTP com:
-    - Retry exponencial
-    - Timeout configurável
-    - Headers opcionais
-    - Logging estruturado
+    HTTP client with exponential backoff retries, timeout and structured logs.
     """
 
     def __init__(
@@ -21,7 +17,7 @@ class APIService:
         timeout: int = 10,
         max_retries: int = 3,
         backoff_factor: float = 1.5,
-        headers: Optional[dict] = None,
+        headers: Optional[Dict[str, str]] = None,
     ):
         self.base_url = base_url
         self.timeout = timeout
@@ -29,55 +25,32 @@ class APIService:
         self.backoff_factor = backoff_factor
         self.headers = headers or {"Content-Type": "application/json"}
 
-    def get(self, endpoint: str = "") -> dict:
-        """
-        Executa requisição GET profissional com retry exponencial.
-        """
-
+    def get(self, endpoint: str = "", params: Optional[Dict[str, Any]] = None) -> Any:
         url = f"{self.base_url}{endpoint}"
-
         for attempt in range(1, self.max_retries + 1):
-
             logger.info({
                 "event": "api_request_start",
                 "url": url,
                 "attempt": attempt
             })
-
             try:
-                response = requests.get(
-                    url,
-                    headers=self.headers,
-                    timeout=self.timeout
-                )
-
-                response.raise_for_status()
-
+                resp = requests.get(url, headers=self.headers, timeout=self.timeout, params=params)
+                resp.raise_for_status()
                 logger.info({
                     "event": "api_request_success",
-                    "status_code": response.status_code,
+                    "status_code": resp.status_code
                 })
-
-                return response.json()
-
+                return resp.json()
             except Exception as e:
                 logger.error({
                     "event": "api_request_error",
+                    "url": url,
                     "attempt": attempt,
                     "error": str(e)
                 })
-
-                # Se ainda há tentativas restantes, aguardar com backoff
                 if attempt < self.max_retries:
                     sleep_time = self.backoff_factor ** attempt
-                    logger.info({
-                        "event": "api_retry_wait",
-                        "sleep_seconds": sleep_time
-                    })
+                    logger.info({"event": "api_retry_wait", "sleep_seconds": sleep_time})
                     time.sleep(sleep_time)
                 else:
-                    raise ExtractError(
-                        f"Falha ao consumir API após {self.max_retries} tentativas: {e}"
-                    )
-        raise ExtractError("Falha desconhecida ao consumir API.")
-    
+                    raise ExtractError(f"Failed to GET {url} after {self.max_retries} attempts: {e}")

@@ -9,24 +9,28 @@ from src.etl.loader import Loader
 
 def run_etl():
     logger.info({"event": "etl_start", "message": "Pipeline ETL iniciado localmente."})
-
     try:
         Config.validate()
-
-        extractor = Extractor(api_url=Config.API_URL)
+        extractor = Extractor(base_url=Config.API_URL)
         transformer = Transformer()
-        loader = Loader(
-            project_id=Config.PROJECT_ID,
-            dataset=Config.DATASET,
-            table=Config.TABLE
+        loader = Loader(project_id=Config.PROJECT_ID, location=Config.BQ_LOCATION)
+
+        # Extract
+        raw = extractor.fetch_data()
+        # Transform
+        df = transformer.run(raw)
+        # Load
+        result = loader.load(
+            df=df,
+            dataset_id=Config.DATASET,
+            table_id=Config.TABLE,
+            write_disposition="WRITE_APPEND",
+            create_dataset=True,
+            create_table=False,
+            table_schema=None
         )
 
-        raw_data = extractor.fetch_data()
-        df = transformer.run(raw_data)
-        loader.load_dataframe(df)
-
-        logger.info({"event": "etl_finished", "status": "success"})
-
+        logger.info({"event": "etl_finished", "status": "success", "load_result": result})
     except (ExtractError, TransformError, LoadError) as e:
         logger.error({"event": "etl_error", "error": str(e)})
     except Exception as e:

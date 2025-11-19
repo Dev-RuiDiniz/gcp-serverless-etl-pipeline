@@ -1,18 +1,18 @@
 class ExtractError(Exception):
-    """Erro durante a etapa de extração de dados."""
+    """Failed extraction"""
     pass
 
 
 class TransformError(Exception):
-    """Erro durante a transformação de dados."""
+    """Failed transform"""
     pass
 
 
 class LoadError(Exception):
-    """Erro durante o carregamento no BigQuery."""
+    """Failed load"""
     pass
 
 
 class ConfigError(Exception):
-    """Erro relacionado à configuração do projeto."""
+    """Configuration missing or invalid"""
     pass
