@@ -15,9 +15,11 @@ class Config:
     DATASET = os.getenv("BIGQUERY_DATASET")
     TABLE = os.getenv("BIGQUERY_TABLE")
 
-    API_URL = os.getenv("API_URL", "https://servicodados.ibge.gov.br/api/v1/localidades/estados")
+    API_URL = os.getenv(
+        "API_URL",
+        "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
+    )
 
-    # Cloud Function
     FUNCTION_REGION = os.getenv("FUNCTION_REGION", "southamerica-east1")
 
     @classmethod

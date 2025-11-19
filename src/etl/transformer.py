@@ -5,12 +5,8 @@ from src.core.exceptions import TransformError
 
 class Transformer:
     """
-    Classe responsável por transformar dados com Pandas.
-    Segue boas práticas de POO e clean code.
+    Classe responsável pela transformação dos dados.
     """
-
-    def __init__(self):
-        pass
 
     def to_dataframe(self, raw_data: dict | list) -> pd.DataFrame:
         logger.info({"event": "transform_start"})
@@ -26,14 +22,10 @@ class Transformer:
             return df
 
         except Exception as e:
-            logger.error({
-                "event": "transform_error",
-                "error": str(e)
-            })
+            logger.error({"event": "transform_error", "error": str(e)})
             raise TransformError(f"Erro ao transformar dados em DataFrame: {e}")
 
     def clean_columns(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Normaliza nomes de colunas."""
         try:
             df.columns = (
                 df.columns
@@ -42,20 +34,14 @@ class Transformer:
                 .str.replace("-", "_")
             )
 
-            logger.info({
-                "event": "transform_clean_columns",
-                "columns": list(df.columns)
-            })
+            logger.info({"event": "transform_clean_columns", "columns": df.columns.tolist()})
 
             return df
 
         except Exception as e:
-            raise TransformError(f"Erro ao normalizar colunas: {e}")
+            raise TransformError(f"Erro ao limpar colunas: {e}")
 
     def run(self, raw_data: dict | list) -> pd.DataFrame:
-        """
-        Método principal que executa todo o fluxo de transformação.
-        """
         df = self.to_dataframe(raw_data)
         df = self.clean_columns(df)
         return df

@@ -5,3 +5,4 @@ google-cloud-secret-manager
 google-cloud-core
 pyarrow
 python-dotenv
+python-json-logger

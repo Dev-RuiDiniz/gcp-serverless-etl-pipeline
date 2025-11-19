@@ -8,11 +8,6 @@ from src.etl.loader import Loader
 
 
 def main(request):
-    """
-    Função principal usada pelo Google Cloud Functions.
-    Trigger HTTP.
-    """
-
     logger.info({"event": "cloud_function_start", "message": "Execução iniciada."})
 
     try:

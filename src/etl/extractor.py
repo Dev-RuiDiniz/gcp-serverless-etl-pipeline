@@ -6,7 +6,6 @@ from src.core.exceptions import ExtractError
 class Extractor:
     """
     Classe responsável por extrair dados de uma API externa.
-    Implementa boas práticas de POO, SRP e logging estruturado.
     """
 
     def __init__(self, api_url: str, timeout: int = 10):
@@ -29,8 +28,5 @@ class Extractor:
             return data
 
         except Exception as e:
-            logger.error({
-                "event": "extract_error",
-                "error": str(e)
-            })
+            logger.error({"event": "extract_error", "error": str(e)})
             raise ExtractError(f"Erro ao extrair dados da API: {e}")

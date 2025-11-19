@@ -6,7 +6,6 @@ from src.core.exceptions import LoadError
 class Loader:
     """
     Classe responsável por carregar dados no BigQuery.
-    POO + SOLID — cada classe com uma responsabilidade.
     """
 
     def __init__(self, project_id: str, dataset: str, table: str):
@@ -28,7 +27,7 @@ class Loader:
 
         try:
             job = self.client.load_table_from_dataframe(df, self.table_id)
-            job.result()  # Espera o job finalizar
+            job.result()
 
             logger.info({
                 "event": "load_success",
@@ -37,8 +36,5 @@ class Loader:
             })
 
         except Exception as e:
-            logger.error({
-                "event": "load_error",
-                "error": str(e)
-            })
+            logger.error({"event": "load_error", "error": str(e)})
             raise LoadError(f"Erro ao carregar dados no BigQuery: {e}")
