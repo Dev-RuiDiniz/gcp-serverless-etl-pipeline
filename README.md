@@ -77,11 +77,12 @@ Copiar código
     ├── deploy.sh
     └── gcloud_instructions.md
 ```
+---
 
 ## 🚀 Execução Local
 
 ```bash
-Copiar código
+
 python -m venv venv
 source venv/bin/activate       # Linux/Mac
 venv\Scripts\activate          # Windows
@@ -97,7 +98,7 @@ python src/main.py
 Deploy manual:
 
 ```bash
-Copiar código
+
 gcloud functions deploy etl_pipeline \
   --runtime python311 \
   --trigger-http \
@@ -117,7 +118,10 @@ Após o carregamento no BigQuery, você pode conectar a tabela diretamente ao Lo
 ---
 
 ## 👨‍💻 Autor
+
 **Rui Francisco de Paula Inácio Diniz**
-Engenheiro de Software | Desenvolvedor Back-end Python | Analista de Dados
-GitHub: https://github.com/Dev-RuiDiniz
-LinkedIn: https://linkedin.com/in/rui-francisco
+
+***Engenheiro de Software | Desenvolvedor Back-end Python | Analista de Dados***
+  
+- GitHub: https://github.com/Dev-RuiDiniz
+- LinkedIn: https://linkedin.com/in/rui-francisco
