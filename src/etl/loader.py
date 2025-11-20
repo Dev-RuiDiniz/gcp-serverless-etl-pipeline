@@ -37,3 +37,15 @@ class Loader:
         except Exception as e:
             logger.error({"event": "loader_error", "error": str(e)})
             raise LoadError(f"Erro no loader: {e}")
+
+from src.models.schema_definition import IBGE_STATE_SCHEMA
+
+result = loader.load(
+    df=df,
+    dataset_id=Config.DATASET,
+    table_id=Config.TABLE,
+    write_disposition="WRITE_APPEND",
+    create_dataset=True,
+    create_table=True,
+    table_schema=IBGE_STATE_SCHEMA
+)
