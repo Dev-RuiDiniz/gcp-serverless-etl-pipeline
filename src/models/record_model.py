@@ -1,19 +1,18 @@
 from typing import Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from src.utils.serializers import serialize_region
 
 
 class RecordModel(BaseModel):
-    """
-    DTO padrão para representar um registro da API.
-    Pode ser adaptado conforme o endpoint usado.
-    """
+    id: int
+    nome: str
+    sigla: str | None = None
+    regiao: dict | None = None
 
-    id: int = Field(..., description="ID único do registro")
-    nome: str = Field(..., description="Nome da unidade federativa")
-    sigla: Optional[str] = Field(None, description="Sigla do estado")
-    regiao: Optional[dict] = Field(None, description="Região do estado")
-
-    class Config:
-        extra = "ignore"   # Ignora campos desnecessários
-        validate_assignment = True
-        from_attributes = True
+    def serialize(self):
+        return {
+            "id": self.id,
+            "nome": self.nome,
+            "sigla": self.sigla,
+            "regiao": serialize_region(self.regiao),
+        }
