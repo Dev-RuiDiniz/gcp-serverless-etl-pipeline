@@ -20,6 +20,7 @@ ESTRUTURA DO PROJETO
 .
 ├── README.md                        # Documentação do projeto
 ├── estrutura.txt                    # Estrutura completa do projeto
+├── requirements-dev.txt
 ├── requirements.txt                 # Dependências do Python
 ├── .gitignore                       # Arquivos ignorados pelo Git
 
