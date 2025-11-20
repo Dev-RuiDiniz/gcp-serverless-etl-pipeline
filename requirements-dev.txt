@@ -1,0 +1,18 @@
+# --- Testes ---
+pytest
+pytest-cov
+coverage
+
+# --- Qualidade de código ---
+black
+isort
+flake8
+
+# --- Tipagem ---
+mypy
+types-requests
+types-python-dateutil
+types-PyYAML
+
+# --- Mock e utilidades ---
+pytest-mock
